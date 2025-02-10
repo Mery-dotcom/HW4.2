@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#737070"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    tools:context=".activity.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/location_notice"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/location"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/location" />
+
+        <TextView
+            android:id="@+id/txt_view"
+            android:text="Select location"
+            android:textSize="18sp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="@color/white"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/notice"
+            android:layout_marginHorizontal="130dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/notice"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/weather"
+        android:layout_gravity="center"
+        android:layout_width="250dp"
+        android:layout_height="180dp"/>
+
+    <TextView
+        android:id="@+id/degree"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"/>
+
+    <TextView
+        android:id="@+id/txt_precipitations"
+        android:text="Precipitations"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/et_precipitation1"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_gravity="end"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/et_precipitation2"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_gravity="start"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/conditions"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/rounded"
+        android:layout_marginTop="12dp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/air_humidity"
+            android:src="@drawable/air_humidity"
+            android:layout_width="26dp"
+            android:layout_height="26dp"/>
+
+        <TextView
+            android:id="@+id/et_air_humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/air_temperature"
+            android:layout_marginStart="25dp"
+            android:src="@drawable/air_temperature"
+            android:layout_width="26dp"
+            android:layout_height="26dp"/>
+
+        <TextView
+            android:id="@+id/et_air_temperature"
+            android:textColor="@color/white"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="5dp"
+            android:textSize="14sp"
+            android:layout_width="26dp"
+            android:layout_height="24dp"/>
+
+        <ImageView
+            android:id="@+id/wind_speed"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/wind_speed"
+            android:layout_width="26dp"
+            android:layout_height="26dp"/>
+
+        <TextView
+            android:id="@+id/et_wind_speed"
+            android:layout_width="26dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_today"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_next_forecast"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
