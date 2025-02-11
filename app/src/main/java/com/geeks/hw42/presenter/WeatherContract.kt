@@ -6,6 +6,7 @@ interface WeatherContract {
     interface View {
         fun showWeather(weatherResponse: WeatherResponse)
         fun showError(message: String)
+//        fun showDateTime(date: String)
     }
 
     interface Presenter {

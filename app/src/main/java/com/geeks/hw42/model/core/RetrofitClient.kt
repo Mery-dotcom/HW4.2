@@ -35,7 +35,7 @@ object RetrofitClient {
     }
 
     interface WeatherApiService {
-        @GET("current.json")
+        @GET("forecast.json")
         suspend fun getCurrentWeather(
             @Query("key") apiKey: String,
             @Query("q") location: String,

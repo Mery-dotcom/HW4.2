@@ -1,4 +1,4 @@
-package com.geeks.hw42.fragments
+package com.geeks.hw42.fragments.main
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geeks.hw42.R
 import com.geeks.hw42.adapters.DailyForecastAdapter
@@ -47,15 +46,20 @@ class MainFragment : Fragment(), WeatherContract.View {
             when (current.condition?.code){
                 1000 -> {
                 binding.main.setBackgroundColor(resources.getColor(R.color.blue))
+                    binding.conditions.setBackgroundColor(resources.getColor(R.color.light))
+                    binding.rvNextForecast.setBackgroundColor(resources.getColor(R.color.light))
                 binding.weather.setImageResource(R.drawable.clear)
                 }
 
                 in 1003..1030 -> {
                     binding.main.setBackgroundColor(resources.getColor(R.color.dark_blue))
+                    binding.conditions.setBackgroundColor(resources.getColor(R.color.dark))
+                    binding.rvToday.setBackgroundColor(resources.getColor(R.color.dark))
+                    binding.rvNextForecast.setBackgroundColor(resources.getColor(R.color.dark))
                     binding.weather.setImageResource(R.drawable.rainy)
                 } else -> {
                     binding.main.setBackgroundColor(Color.GRAY)
-                binding.weather.setImageResource(R.drawable.cloudy1)
+                binding.weather.setImageResource(R.drawable.cloudy)
                 }
             }
         }
