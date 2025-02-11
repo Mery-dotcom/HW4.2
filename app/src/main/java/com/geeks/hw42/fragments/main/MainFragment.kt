@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geeks.hw42.R
 import com.geeks.hw42.adapters.DailyForecastAdapter
@@ -32,6 +33,11 @@ class MainFragment : Fragment(), WeatherContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.loadData("Tokmok")
+        setupListener()
+    }
+
+    private fun setupListener() {
+        binding.notice.setOnClickListener{presenter.onNoticeButtonClick()}
     }
 
     override fun showWeather(weatherResponse: WeatherResponse) {
@@ -81,6 +87,10 @@ class MainFragment : Fragment(), WeatherContract.View {
 
     override fun showError(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun navigateToNoticeFragment(notice: Int?) {
+        findNavController().navigate(R.id.noticeFragment)
     }
 
     override fun onDestroy() {

@@ -30,4 +30,8 @@ class WeatherPresenter(private var view: WeatherContract.View?) : WeatherContrac
         view = null
         job.cancel()
     }
+
+    override fun onNoticeButtonClick() {
+        view?.navigateToNoticeFragment(-1)
+    }
 }

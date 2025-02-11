@@ -6,11 +6,12 @@ interface WeatherContract {
     interface View {
         fun showWeather(weatherResponse: WeatherResponse)
         fun showError(message: String)
-//        fun showDateTime(date: String)
+        fun navigateToNoticeFragment(notice: Int?)
     }
 
     interface Presenter {
         fun loadData(location: String)
         fun onDestroy()
+        fun onNoticeButtonClick()
     }
 }

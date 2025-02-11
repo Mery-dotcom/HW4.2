@@ -14,4 +14,9 @@
         android:name="com.geeks.hw42.activity.MainActivity"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.geeks.hw42.fragments.notice.NoticeFragment"
+        android:label="fragment_notice"
+        tools:layout="@layout/fragment_notice" />
 </navigation>
