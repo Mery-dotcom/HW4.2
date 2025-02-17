@@ -1,6 +1,7 @@
 package com.geeks.hw42.model.core
 
 import com.geeks.hw42.model.models.WeatherResponse
+import com.geeks.hw42.model.service.WeatherApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -34,12 +35,12 @@ object RetrofitClient {
             .create(WeatherApiService::class.java)
     }
 
-    interface WeatherApiService {
-        @GET("forecast.json")
-        suspend fun getCurrentWeather(
-            @Query("key") apiKey: String,
-            @Query("q") location: String,
-            @Query("days") days: Int = 3
-        ): WeatherResponse
-    }
+//    interface WeatherApiService {
+//        @GET("forecast.json")
+//        suspend fun getCurrentWeather(
+//            @Query("key") apiKey: String,
+//            @Query("q") location: String,
+//            @Query("days") days: Int = 3
+//        ): WeatherResponse
+//    }
 }

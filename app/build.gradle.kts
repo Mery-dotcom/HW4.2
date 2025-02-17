@@ -61,4 +61,7 @@ dependencies {
 //    val navVersion = "2.0.21"
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }

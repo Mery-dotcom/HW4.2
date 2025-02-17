@@ -7,20 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geeks.hw42.R
-import com.geeks.hw42.adapters.DailyForecastAdapter
+import com.geeks.hw42.adapters.WeatherAdapter
 import com.geeks.hw42.adapters.HourlyForecastAdapter
 import com.geeks.hw42.databinding.FragmentMainBinding
 import com.geeks.hw42.model.models.WeatherResponse
-import com.geeks.hw42.presenter.WeatherContract
-import com.geeks.hw42.presenter.WeatherPresenter
+import com.geeks.hw42.repositories.WeatherRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainFragment : Fragment(), WeatherContract.View {
+class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private val presenter by lazy { WeatherPresenter(this) }
+    private val repository = WeatherRepository()
+    private val adapter = WeatherAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,69 +36,75 @@ class MainFragment : Fragment(), WeatherContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.loadData("Tokmok")
+       loadData()
         setupListener()
     }
 
+    private fun loadData() {
+        lifecycleScope.launch {
+            try {
+                val weatherResponse = withContext(Dispatchers.IO){
+                    repository.getCurrentWeather("Tokmok")
+                }
+                showWeather(weatherResponse)
+            } catch (e: Exception) {
+                showError(e.message ?: "Unknown error")
+            }
+        }
+    }
+
     private fun setupListener() {
-        binding.notice.setOnClickListener{presenter.onNoticeButtonClick()}
-    }
-
-    override fun showWeather(weatherResponse: WeatherResponse) {
-        weatherResponse.current?.let { current ->
-            binding.degree.text = "${current.tempC?.toInt() ?: 0}°C"
-            binding.etPrecipitation1.text = "Max: ${current.precipMm ?: 0}"
-            binding.etPrecipitation2.text = "Min: ${current.precipIn ?: 0}"
-            binding.etAirHumidity.text = "${current.humidity ?: 0}%"
-            binding.etAirTemperature.text = "${current.feelslikeC?.toInt() ?: 0}°C"
-            binding.etWindSpeed.text = "${current.windKph?.toInt() ?: 0} km/h"
-
-            when (current.condition?.code){
-                1000 -> {
-                binding.main.setBackgroundColor(resources.getColor(R.color.blue))
-                    binding.conditions.setBackgroundColor(resources.getColor(R.color.light))
-                    binding.rvNextForecast.setBackgroundColor(resources.getColor(R.color.light))
-                binding.weather.setImageResource(R.drawable.clear)
-                }
-
-                in 1003..1030 -> {
-                    binding.main.setBackgroundColor(resources.getColor(R.color.dark_blue))
-                    binding.conditions.setBackgroundColor(resources.getColor(R.color.dark))
-                    binding.rvToday.setBackgroundColor(resources.getColor(R.color.dark))
-                    binding.rvNextForecast.setBackgroundColor(resources.getColor(R.color.dark))
-                    binding.weather.setImageResource(R.drawable.rainy)
-                } else -> {
-                    binding.main.setBackgroundColor(Color.GRAY)
-                binding.weather.setImageResource(R.drawable.cloudy)
-                }
-            }
-        }
-
-        weatherResponse.forecast?.forecastday?.let { forecastDays ->
-            forecastDays.firstOrNull()?.hour?.let { hourlyList ->
-                val hourlyAdapter = HourlyForecastAdapter(hourlyList)
-                binding.rvToday.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                binding.rvToday.adapter = hourlyAdapter
-            }
-            if (forecastDays.size > 1) {
-                val dailyList = forecastDays.subList(1, forecastDays.size)
-                val dailyAdapter = DailyForecastAdapter(dailyList)
-                binding.rvNextForecast.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                binding.rvNextForecast.adapter = dailyAdapter
-            }
+        binding.notice.setOnClickListener {
+            findNavController().navigate(R.id.noticeFragment)
         }
     }
 
-    override fun showError(message: String) {
+    private fun showWeather(weatherResponse: WeatherResponse) {
+        binding.apply {
+            weatherResponse.current?.let {
+                degree.text = "${it.tempC?.toInt() ?: 0}°C"
+                etPrecipitation1.text = "Max: ${it.precipMm ?: 0}"
+                etPrecipitation2.text = "Min: ${it.precipIn ?: 0}"
+                etAirHumidity.text = "${it.humidity ?: 0}%"
+                etAirTemperature.text = "${it.feelslikeC?.toInt() ?: 0}°C"
+                etWindSpeed.text = "${it.windKph?.toInt() ?: 0} km/h"
+            }
+
+            val list = mutableListOf<String>()
+            weatherResponse.location?.name?.let { list.add(it) }
+            repeat(5) { list.add("2") }
+            adapter.submitList(list)
+        }
+    }
+
+    private fun initRecyclerView() {
+        binding.rvNextForecast.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = adapter
+        }
+    }
+
+    private fun showError(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-
-    override fun navigateToNoticeFragment(notice: Int?) {
-        findNavController().navigate(R.id.noticeFragment)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.onDestroy()
-    }
 }
+
+//        weatherResponse.forecast?.forecastday?.let { forecastDays ->
+//            forecastDays.firstOrNull()?.hour?.let { hourlyList ->
+//                val hourlyAdapter = HourlyForecastAdapter(hourlyList)
+//                binding.rvToday.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//                binding.rvToday.adapter = hourlyAdapter
+//            }
+//            if (forecastDays.size > 1) {
+//                val dailyList = forecastDays.subList(1, forecastDays.size)
+//                val dailyAdapter = WeatherAdapter(dailyList)
+//                binding.rvNextForecast.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//                binding.rvNextForecast.adapter = dailyAdapter
+//            }
+//        }
+//    }
+
+//
+//    private fun showError(message: String) {
+//        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+//    }
